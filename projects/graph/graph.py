@@ -129,7 +129,7 @@ class Graph:
                     # APPEND THE NEIGHOR TO THE BACK
                     q.enqueue(path + [neighbor])
 
-    def dfs(self, starting_vertex, destination_vertex, path=[]):
+    def dfs(self, starting_vertex, destination_vertex):
         """
         Return a list containing a path from
         starting_vertex to destination_vertex in
