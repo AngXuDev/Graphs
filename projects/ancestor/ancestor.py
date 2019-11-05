@@ -50,6 +50,8 @@
 #         path = q.pop(0)
 #         if len(path) > len(store[0]):
 #             store[0] = path
+#         if len(path) == len(store[0]) and path[-1] < store[0][-1]:
+#             store[0] = path
 #         # print(path, store)
 
 #         # grab last node from path
@@ -79,10 +81,10 @@ def earliest_ancestor(ancestors, starting_node):
     while len(q) > 0:
         # dequeue first child
         cur_anc = q.pop(0)
-        # ancestor is smallest number in ancestor list
+        # ancestor is smallest number in ancestor list if ancestor list is not empty
         if len(anc_list) > 0:
             ancestor = min(anc_list)
-        # clear anc_list upon new loop through ancestors
+        # clear anc_list for new loop through ancestors/family connections list
         anc_list = []
         # loop through list of family connections
         for tup in ancestors:
@@ -100,6 +102,6 @@ def earliest_ancestor(ancestors, starting_node):
         return ancestor
 
 
-ancestors = [(1, 3), (2, 3), (3, 6), (5, 6), (5, 7),
-             (4, 5), (4, 8), (8, 9), (11, 8), (10, 1)]
-print(earliest_ancestor(ancestors, 6))
+ancestors = [(1, 3), (2, 3), (3, 6), (5, 6), (5, 7), (11, 8),
+             (4, 5), (4, 8), (8, 9), (10, 1)]
+print(earliest_ancestor(ancestors, 9))
