@@ -75,13 +75,14 @@ class Graph:
                     s.push(neighbor)
         print('dft end')
 
-    def dft_recursive(self, starting_vertex, visited=set()):
+    def dft_recursive(self, starting_vertex, visited=None):
         """
         Print each vertex in depth-first order
         beginning from starting_vertex.
         This should be done using recursion.
         """
-        if len(visited) == 0:
+        if visited is None:
+            visited = set()
             print('dft recursive start')
         # add vertex parameter to visited set
         visited.add(starting_vertex)
@@ -173,6 +174,8 @@ if __name__ == '__main__':
     graph.add_vertex(5)
     graph.add_vertex(6)
     graph.add_vertex(7)
+    graph.add_vertex(8)
+    graph.add_vertex(9)
     graph.add_edge(5, 3)
     graph.add_edge(6, 3)
     graph.add_edge(7, 1)
@@ -183,7 +186,8 @@ if __name__ == '__main__':
     graph.add_edge(3, 5)
     graph.add_edge(2, 3)
     graph.add_edge(4, 6)
-
+    graph.add_edge(8, 9)
+    graph.add_edge(9, 8)
     '''
     Should print:
         {1: {2}, 2: {3, 4}, 3: {5}, 4: {6, 7}, 5: {3}, 6: {3}, 7: {1, 6}}
@@ -223,6 +227,8 @@ if __name__ == '__main__':
         1, 2, 4, 7, 6, 3, 5
         1, 2, 4, 6, 3, 5, 7
     '''
+    graph.dft_recursive(1)
+    print("break")
     graph.dft_recursive(1)
 
     '''
