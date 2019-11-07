@@ -64,8 +64,8 @@ class SocialGraph:
 
         # Shuffle the list
         random.shuffle(possibleFriendships)
-        print("random friendships:")
-        print(possibleFriendships)
+        # print("random friendships:")
+        # print(possibleFriendships)
 
         # Slice off totalFriendships from the front, create friendships
         totalFriendships = avgFriendships * numUsers // 2
@@ -101,12 +101,16 @@ class SocialGraph:
                     visited[friend] = visited[cur] + [friend]
                     # add friend to queue
                     q.append(friend)
-        return visited
+        percentage = len(visited.keys())/len(self.users.keys()) * 100
+        length = [len(x) for x in visited.values()]
+        # average subtracts 1 since first connection is from self
+        average = round(sum(length) / len(visited.keys()), 2) - 1
+        return f"{visited} \npercentage of all users in network: {percentage}% \naverage degree of separation: {average}"
 
 
 if __name__ == '__main__':
     sg = SocialGraph()
     sg.populateGraph(10, 2)
-    print(sg.friendships)
+    # print(sg.friendships)
     connections = sg.getAllSocialPaths(1)
     print(connections)
