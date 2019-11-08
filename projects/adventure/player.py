@@ -10,4 +10,5 @@ class Player:
             if (showRooms):
                 nextRoom.printRoomDescription(self)
         else:
-            print("You cannot move in that direction.")
+            print(
+                f"You are in {self.currentRoom.id}. You cannot move in {direction} direction.")
