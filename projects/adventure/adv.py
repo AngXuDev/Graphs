@@ -21,8 +21,35 @@ world.printRooms()
 
 player = Player("Name", world.startingRoom)
 
+n = 'n'
+s = 's'
+e = 'e'
+w = 'w'
 # Fill this out
-traversalPath = []
+# define sections
+# from 46, n to 61, s to 46, w to 79, e to 46
+nw_section = [n] + [w, n, s, e, n, n, w, n, s, w, n, w, e, s, e, e, s, s] + [s] + [w] + [w, n, n, w, n, s, e, s, s, w, n, s, w, n, n, n, n, n, s, s, s, s, w, w, w, e, e, n, n, n, n, w, e, n, n, s, s, s, s, s, w, n, n, s, s, w, n, w, e, n, n, s, s, s, w, w, w, e, s, w, e, n, e, e, e, e, s, e, s, e, e, e] + [e]
+# from 121, move to 163, w to 165, e to 163, move to 257, move to 121
+n_section = [n, e, w, n] + [w] + [n, n, s, w, n, s, e, s, w, w, w, s, w, e, n, w, n, s, w, n, s, e, e, e, n, w, n, n, w, e, s, s, e, n, n, n, s, s, s, s, e, e] + [e] + [e, n, n, s, s, w, n] + [n, n, e, n, w, w, e, e, s, e, n, e, e, w, w, s, s, s, s, e, n, n, n, s, s, e, n, n, s, e, n, n, s, e, e, w, s, n, w, s, w, s, w, s, s, e, e, w, n, e, n, s, e, n, s, e, w, w, w, s, w, s, e, w, w, n, s, w, w]
+# from 177, move to 81, w to 108, e to 81, n to 137, s to 81, move to 13
+w_section = [w, n, s, w, w, w, s, w, s, n, e, n, e, e, n, w, w, n, w, e, s, e, n, n, w, n, w, e, e, n, w, w, e, n, s, e, n, s, e, e, e, n, w, w, e, e, e, s, n, n] + [w] + [w, w, w, e, n, n, s, w, w, w, e, s, n, e, n, w, w, w, e, e, e, n, s, s, e, s, e, e] + [e] + [n] + [w, w, e, n, w, e, s, e] + [s] + [e, n, s, e, n, s, e, n, s, e, e]
+# from 12, e to 18, s to 24, n to 18, e to 34, n to 35, s to 34, e to 39, w to 34, w to 18, w to 12, n to 20, e to 26, w to 20, n to 31, s to 20, s to 12
+e_section = [e] + [s] + [s, s, n, n, e, s, s, e, w, n, e, e, e, e, e, w, w, w, s, e, e, e, w, s, n, w, w, s, s, e, e, w, n, s, w, s, e, e, w, w, s, e, e, w, w, n, n, n, n, n, w, w, n, w] + [n] + [e] + [n] + [e, e, e, e, e, e, s, n, w, w, w, w, w, n, e, n, e, s, n, e, s, e, e, e, s, n, w, w, w, n, e, e, w, n, e, w, s, w, w, w, n, e, e, n, e, w, s, w, n, n, e, e, e, s, n, w, w, w, s, s, w, s, s, w, s, w] + [s] + [e] + [s, n, e, e, e, w, w, s, e, e, e, n, s, e, w, w, w, w, n, w] + [w] + [w] + [w] + [n] + [e] + [n, e, n, n, n, n, s, s, s, e, n, n, n, s, e, n, n, e, n, s, e, n, s, e, n, s, e, w, w, w, w, s, s, w, s, s, w, s, w, s] + [w] + [n] + [n, n, n, s, s, e, n, n, s, s, w, s] + [s] + [s]
+# from 1, move to 5, w to 6, e to 5, s to 50
+s_section = [e, w, s, e, s, n, w, s] + [w] + [s, s, s, s, s, s, s, s, s, s, n, n, n, n, n, w, w, s, e, s, s, s, n, n, n, w, s, n, w, s, n, e, n, w, n, s, e, e, n, w, e, n, w, e, n, w, w, s, n, e, e, n, w, e, n, w, e, e] + [e] + [s]
+# from 50, e to 70, w to 5, move to 232, w to 244, e to 232, s to 265, s to 268, n to 265, e to 273
+se_section = [e] + [s, s, n, n, e, s, s, s, s, s, e, w, n, n, n, e, s, e, w, s, e, e, e, e, w, w, w, w, n, n, w, n, e, n, e, s, s, n, n, w, s, w, n, w] + [w] + [s, s, s, s, n, e, s, s] + [w] + [s, s, n, n] + [e] + [s] + [s] + [s, w, s, n, e, s, s, n, n, n] + [n] + [e] + [s, e, e, s, s, n, n, w, s, s, n, n, w, s, s, n, n, n, e, e, n, e, s, s, n, n, e, e, w, s, s, e, w, s, s]
+
+# starting point 0
+start = [s, w, e, n, n, s]
+# from 3, w to 11, e to 3, n to 21, move to 104, w to 105, e to 104, move to 149, s to 191, n to 149, w to 156, s to 209, n to 156, w to 177
+three_int = [w] + [s, w, s, s, n, n, e, n] + [e] + [n] + [w, w, s, n, w, s, s, s] + [w] + [n, w, w, w, e, e, e, s, w, w, s, w, n, s, e, n, e, e] + [e] + [s, w, w, e, s, w, e, n, e, s, s] + [s] + [s, w, s, s, s, n, n, w, s, w, e, s, w, e, n, n, e, n, e, s, s, s, s, w, e, n, e, s, n, e, s, s, e, w, s, w, e, n, n, n, w, w, n, n, n, n] + [n] + [w] + [s] + [w, s, w, s, n, e, n, w, w, w, e, s, w, w, e, e, s, w, w, w, w, e, e, e, s, w, e, s, w, e, s, w, w, e, e, s, n, n, n, n, e, s, s, s, e, w, s, e, w, n, n, n, n, n, n, e, e, e] + [n] + [w]
+# from 13, move to 17, w to 46, nw section, e to 17, move to 121, n section, move to 7
+thirteen_int = [n, w, e, n, n, s] + [w] + nw_section + [e] + [e, s, n, n, n, w, n, n, w, n, e, w, w, e, s, e, s, s, e, n, e, e, w, w, n] + n_section + [s, s, s, s, w, s, s, e, s]
+# from 7, e to 12, e section, w to 7, s to 1
+seven_int = [e] + e_section + [w] + [s]
+
+traversalPath = start + [w] + three_int + w_section + thirteen_int + seven_int + s_section + se_section
 
 
 
