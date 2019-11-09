@@ -53,50 +53,33 @@ player = Player("Name", world.startingRoom)
 # traversalPath = start + [w] + three_int + w_section + thirteen_int + seven_int + s_section + se_section
 
 # Algo Method
-# define traversal and visited
+# define traversal list and visited dictionary
 traversalPath = []
 visited = {}
 # define reversal directions
 reverse = {'n':'s', 's':'n', 'e':'w', 'w':'e'}
-# initialize queue and add first room, establish starting coordinates
+# initialize first room, establish starting coordinates
 player.currentRoom = world.startingRoom
-# test results from different room than starting room
-# player.currentRoom = world.rooms[445]
 start = world.startingRoom.getCoords()
 
-def findPath(start, end):
-  q_path = []
-  q_path.append(([start],[]))
-  searched = set()
-  while len(q_path) > 0:
-    cur = q_path.pop(0)
+def findAndGo(current):
+  q = []
+  q.append(([current],[]))
+  done = set()
+  while len(q) > 0:
+    cur = q.pop(0)
     last = cur[0][-1]
     exits = roomGraph[last][1]
 
-    if last not in searched:
-      if last == end:
-        return cur[1]
-      searched.add(last)
-      for e in exits:
-        q_path.append((cur[0] + [exits[e]], cur[1] + [e]))
-
-def findNew(current):
-  q_new = []
-  q_new.append([current])
-  new = set()
-  while len(q_new) > 0:
-    cur = q_new.pop(0)
-    last = cur[-1]
-    exits = roomGraph[last][1]
-
-    if last not in new:
+    if last not in done:
       if last not in visited:
-        return last
-      new.add(last)
+        return [last, cur[1]]
+      done.add(last)
+      # randomize find directions
       shuffled_exits = list(exits.keys())
       random.shuffle(shuffled_exits)
       for e in shuffled_exits:
-        q_new.append(cur + [exits[e]])
+        q.append((cur[0] + [exits[e]], cur[1] + [e]))
 
 # establish current room
 cur = player.currentRoom
@@ -121,17 +104,15 @@ while len(visited) < 499:
       traversalPath.append(reverse[e])
       # add room to visited
       visited[e_id] = roomGraph[e_id][1]
-  
+
   # find nearest room not visited
-  next = findNew(id)
+  next = findAndGo(id)
   # if all rooms have not been visited
   if next is not None:
-    # find a path to the nearest room
-    go = findPath(id, next)
-    # add that pathway to traversalPath
-    traversalPath += go
+    # add pathway to traversalPath
+    traversalPath += next[1]
     # change reference to current room
-    cur = world.rooms[next]
+    cur = world.rooms[next[0]]
 
   # print(f"route: {traversalPath} \nvisited: {visited} \ncur_room: {id} at {coords} \ncur_exits: {exits}")
   # print(f"cur_room: {id} at {coords}", len(visited), len(traversalPath))
