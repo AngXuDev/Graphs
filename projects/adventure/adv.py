@@ -52,70 +52,84 @@ player = Player("Name", world.startingRoom)
 
 # traversalPath = start + [w] + three_int + w_section + thirteen_int + seven_int + s_section + se_section
 
-# Algo Method
-# define traversal list and visited dictionary
+# Algo Method - lowest is 940
+# define traversal list
 traversalPath = []
-visited = {}
-# define reversal directions
-reverse = {'n':'s', 's':'n', 'e':'w', 'w':'e'}
-# initialize first room, establish starting coordinates
-player.currentRoom = world.startingRoom
-start = world.startingRoom.getCoords()
+def travel_algo():
+  # clear traversal list and visited dictionary
+  traversalPath = []
+  visited = {}
+  # define reversal directions
+  reverse = {'n':'s', 's':'n', 'e':'w', 'w':'e'}
+  # initialize first room, establish starting coordinates
+  player.currentRoom = world.startingRoom
+  # start = world.startingRoom.getCoords()
 
-def findAndGo(current):
-  q = []
-  q.append(([current],[]))
-  done = set()
-  while len(q) > 0:
-    cur = q.pop(0)
-    last = cur[0][-1]
-    exits = roomGraph[last][1]
+  def findAndGo(current):
+    q = []
+    q.append(([current],[]))
+    done = set()
+    while len(q) > 0:
+      cur = q.pop(0)
+      last = cur[0][-1]
+      exits = roomGraph[last][1]
 
-    if last not in done:
-      if last not in visited:
-        return [last, cur[1]]
-      done.add(last)
-      # randomize find directions
-      shuffled_exits = list(exits.keys())
-      random.shuffle(shuffled_exits)
-      for e in shuffled_exits:
-        q.append((cur[0] + [exits[e]], cur[1] + [e]))
+      if last not in done:
+        if last not in visited:
+          return [last, cur[1]]
+        done.add(last)
+        # randomize find directions
+        shuffled_exits = list(exits.keys())
+        random.shuffle(shuffled_exits)
+        for e in shuffled_exits:
+          q.append((cur[0] + [exits[e]], cur[1] + [e]))
 
-# establish current room
-cur = player.currentRoom
+  # establish current room
+  cur = player.currentRoom
 
-# while not all rooms have been visited
-while len(visited) < 499:
-  # define room number and exits (exits lists direction as key and room number as value)
-  id = cur.id
-  coords = roomGraph[id][0]
-  exits = roomGraph[id][1]
-  # if room has not been visited, add to visited
-  if cur.id not in visited:
-    visited[cur.id] = exits
+  # while not all rooms have been visited
+  while len(visited) < 499:
+    # define room number and exits (exits lists direction as key and room number as value)
+    id = cur.id
+    # coords = roomGraph[id][0]
+    exits = roomGraph[id][1]
+    # if room has not been visited, add to visited
+    if cur.id not in visited:
+      visited[cur.id] = exits
 
-  # loop through exits once first to find dead ends
-  for e in exits:
-    e_id = exits[e]
-    # if an exit is a dead end and it has not been visited, top move priority
-    if len(roomGraph[e_id][1]) == 1 and e_id not in visited:
-      # add roundtrip travel path
-      traversalPath.append(e)
-      traversalPath.append(reverse[e])
-      # add room to visited
-      visited[e_id] = roomGraph[e_id][1]
+    # loop through exits once first to find dead ends
+    for e in exits:
+      e_id = exits[e]
+      # if an exit is a dead end and it has not been visited, top move priority
+      if len(roomGraph[e_id][1]) == 1 and e_id not in visited:
+        # add roundtrip travel path
+        traversalPath.append(e)
+        traversalPath.append(reverse[e])
+        # add room to visited
+        visited[e_id] = roomGraph[e_id][1]
 
-  # find nearest room not visited
-  next = findAndGo(id)
-  # if all rooms have not been visited
-  if next is not None:
-    # add pathway to traversalPath
-    traversalPath += next[1]
-    # change reference to current room
-    cur = world.rooms[next[0]]
-
+    # find nearest room not visited
+    next = findAndGo(id)
+    # if all rooms have not been visited
+    if next is not None:
+      # add pathway to traversalPath
+      traversalPath += next[1]
+      # change reference to current room
+      cur = world.rooms[next[0]]
+  
   # print(f"route: {traversalPath} \nvisited: {visited} \ncur_room: {id} at {coords} \ncur_exits: {exits}")
   # print(f"cur_room: {id} at {coords}", len(visited), len(traversalPath))
+
+  return traversalPath
+
+traversalPath = travel_algo()
+# force a path of less than ### steps
+algo_counter = 0
+while len(traversalPath) > 956:
+  algo_counter += 1
+  if algo_counter % 2500 == 0:
+    print(f"Algorithm has run {algo_counter} times so far")
+  traversalPath = travel_algo()
 
 # TRAVERSAL TEST
 visited_rooms = set()
@@ -129,16 +143,15 @@ for move in traversalPath:
     visited_rooms.add(player.currentRoom)
     if player.currentRoom.id not in visit_count:
       visit_count[player.currentRoom.id] = 1
+      print(player.currentRoom.id)
     else:
       visit_count[player.currentRoom.id] += 1
 
 if len(visited_rooms) == len(roomGraph):
-    print(f"TESTS PASSED: {len(traversalPath)} moves, {len(visited_rooms)} rooms visited")
+    print(f"TESTS PASSED: {len(traversalPath)} moves, {len(visited_rooms)} rooms visited \nAlgorithm was run {algo_counter} times")
 else:
     print("TESTS FAILED: INCOMPLETE TRAVERSAL")
     print(f"{len(roomGraph) - len(visited_rooms)} unvisited rooms, {len(traversalPath)} moves")
-
-
 
 #######
 # UNCOMMENT TO WALK AROUND
