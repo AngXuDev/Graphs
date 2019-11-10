@@ -125,10 +125,13 @@ def travel_algo():
 traversalPath = travel_algo()
 # force a path of less than ### steps
 algo_counter = 0
-while len(traversalPath) > 956:
+lowest = 1000
+while len(traversalPath) > 940:
   algo_counter += 1
-  if algo_counter % 2500 == 0:
-    print(f"Algorithm has run {algo_counter} times so far")
+  if algo_counter % 5000 == 0:
+    print(f"Algorithm has run {algo_counter} times so far, lowest moves is {lowest}")
+  if len(traversalPath) < lowest:
+    lowest = len(traversalPath)
   traversalPath = travel_algo()
 
 # TRAVERSAL TEST
@@ -148,6 +151,7 @@ for move in traversalPath:
       visit_count[player.currentRoom.id] += 1
 
 if len(visited_rooms) == len(roomGraph):
+    print(f"Travel path: {traversalPath}")
     print(f"TESTS PASSED: {len(traversalPath)} moves, {len(visited_rooms)} rooms visited \nAlgorithm was run {algo_counter} times")
 else:
     print("TESTS FAILED: INCOMPLETE TRAVERSAL")
